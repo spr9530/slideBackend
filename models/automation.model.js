@@ -99,7 +99,7 @@ const postSchema = new mongoose.Schema({
   },
   mediaType: {
     type: String,
-    enum: ['IMAGE', 'REEL'],
+    enum: ['IMAGE', 'REEL', 'CAROUSEL_ALBUM'],
     deafult: 'IMAGE'
   }
 })

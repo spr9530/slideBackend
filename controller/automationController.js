@@ -42,7 +42,9 @@ const getAutomationInfo = async (req, res) => {
     }
 
     const automation = await Automation.findById(id)
+    .populate('trigger')
     .populate('keywords')
+    .populate('posts')
     .populate('listener');
 
     if (!automation) {

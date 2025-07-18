@@ -53,19 +53,12 @@ const handleSignup = async (req, res) => {
 const handleSignin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email, password)
 
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required", type: "error" });
     }
 
-    const user = await User.findOne({ email })
-    if (user && user.integrations?.length > 0) {
-      user = await user.populate({
-        path: 'integrations',
-        select: '_id name expiresAt token',
-      });
-    }
+    let user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: "User not found", type: "error" });
@@ -76,6 +69,13 @@ const handleSignin = async (req, res) => {
       return res.status(401).json({ message: "Invalid password", type: "error" });
     }
 
+    if (user.integrations?.length > 0) {
+      user = await user.populate({
+        path: 'integrations',
+        select: '_id name expiresAt token',
+      });
+    }
+
     const token = generateToken(user._id);
 
     return res.status(200).json({
@@ -83,7 +83,7 @@ const handleSignin = async (req, res) => {
       type: "success",
       user: {
         id: user._id,
-        user: user,
+        ...user.toObject(),  // safer for serialization
         token,
       }
     });
@@ -94,18 +94,19 @@ const handleSignin = async (req, res) => {
   }
 };
 
+
 const findUser = async (req, res) => {
   try {
     const { userId } = req.user;
 
-    const user = await User.findById(userId)
+    let user = await User.findById(userId)
       .select('-password')
 
     if (!user) {
       return res.status(404).json({ message: "User not found", type: 'error' });
     }
 
-    if (user && user.integrations?.length > 0) {
+    if (user.integrations?.length > 0) {
       user = await user.populate({
         path: 'integrations',
         select: '_id name expiresAt token',
