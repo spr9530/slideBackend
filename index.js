@@ -4,6 +4,7 @@ const userRouter = require('./routes/userRoutes');
 const cors = require('cors');
 const automationRouter = require('./routes/automationRoutes');
 const integrationRouter = require('./routes/integrationRoutes');
+const instagramRouter = require('./api/webhooks/instagram');
 require('dotenv').config(); 
 
 const server = express();
@@ -17,7 +18,7 @@ server.use('/api/v1/user', userRouter);
 server.use('/api/v1/user/automations', automationRouter)
 server.use('/api/v1/user/integration', integrationRouter)
 
-server.use('/api/v1/webhook/instagram', automationRouter)
+server.use('/api/v1/webhook/instagram', instagramRouter)
 
 
 

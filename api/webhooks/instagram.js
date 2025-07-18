@@ -98,3 +98,5 @@ instagramRouter.post('/', async (req, res) => {
     }
 });
 
+module.exports = instagramRouter
+
