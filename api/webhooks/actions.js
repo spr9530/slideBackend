@@ -16,6 +16,7 @@ const matchKeyword = async (keyword) => {
     }
 };
 
+
 const getKeywordAutomation = async ({ automationId, dm }) => {
     try {
         const automation = await Automation.findOne({ _id: automationId })
@@ -65,6 +66,33 @@ const sendDM = async ({ userId, receiverId, prompt, token }) => {
   }
 };
 
+const sendPrivateMessage = async ({ userId, receiverId, prompt, token }) => {
+  try {
+    const res = await axios.post(
+      `${process.env.INSTAGRAM_BASE_URL}/${userId}/messages`,
+      {
+        recipient: {
+          comment_id: receiverId,
+        },
+        message: {
+          text: prompt,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // 🔁 Fixed "Beare" to "Bearer"
+          'Content-Type': 'application/json', // 🔁 Fixed key to 'Content-Type'
+        },
+      }
+    );
+
+    return res.data;
+  } catch (error) {
+    console.error('Error sending DM:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
 const trackResponses = async ({ automationId, type }) => {
   try {
     const updateField = type === 'COMMENT' ? { commentCount: 1 } : type === 'DM' ? { dmCount: 1 } : null;
@@ -85,4 +113,4 @@ const trackResponses = async ({ automationId, type }) => {
 };
 
 
-module.exports = { matchKeyword, getKeywordAutomation, sendDM, trackResponses };
+module.exports = { matchKeyword, getKeywordAutomation, sendDM, trackResponses, sendPrivateMessage };

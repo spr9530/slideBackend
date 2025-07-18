@@ -1,5 +1,5 @@
 const express = require('express');
-const { matchKeyword, getKeywordAutomation, trackResponses } = require('./actions');
+const { matchKeyword, getKeywordAutomation, trackResponses, sendPrivateMessage } = require('./actions');
 
 const instagramRouter = express.Router();
 
@@ -20,11 +20,11 @@ instagramRouter.get('/', (req, res) => {
 
 instagramRouter.post('/', async (req, res) => {
     try {
-        const webhook_payload = req.body; // Use req.body instead of req.json()
+        const webhook_payload = req.body; 
         let matcher;
 
         const entry = webhook_payload.entries?.[0];
-        console.log(entry)
+        console.log(webhook_payload)
 
         if (!entry) {
             return res.status(400).json({ message: 'Invalid payload' });
@@ -57,9 +57,9 @@ instagramRouter.post('/', async (req, res) => {
             const listener = automation.listener;
 
             if (listener?.listener === 'MESSAGE') {
-                const directMessage = await sendDM({
-                    userId: entry.id,
-                    receiverId: entry.messaging[0]?.sender?.id,
+                const directMessage = await sendPrivateMessage({
+                    userId: entry[0].id,
+                    receiverId: entry[0].changes[0].value.id,
                     prompt: listener?.prompt,
                     token: automation.userId?.integrations?.[0]?.token
                 });
