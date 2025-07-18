@@ -20,7 +20,7 @@ instagramRouter.get('/', (req, res) => {
 
 instagramRouter.post('/', async (req, res) => {
     try {
-        const webhook_payload = req.json(); // Use req.body instead of req.json()
+        const webhook_payload = req.body; // Use req.body instead of req.json()
         let matcher;
 
         const entry = webhook_payload.entries?.[0];
