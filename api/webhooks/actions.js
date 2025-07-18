@@ -25,7 +25,7 @@ const getKeywordAutomation = async ({ automationId, dm }) => {
             })
             .populate('listener')
             .populate('userId')
-            .populate('integration');
+            // .populate('integration');
 
         if (dm) {
             automation = automation.populate('dms')
