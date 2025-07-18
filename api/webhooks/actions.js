@@ -32,6 +32,7 @@ const getKeywordAutomation = async ({ automationId, dm }) => {
           model: 'Integration'
         }
       })
+      console.log(automation)
     // .populate('integration');
 
     if (dm) {
