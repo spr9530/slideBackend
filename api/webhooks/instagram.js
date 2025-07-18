@@ -58,7 +58,7 @@ instagramRouter.post('/', async (req, res) => {
 
             const listener = automation.listener;
 
-            console.log(listener,entry, entry.changes[0].value)
+            console.log(automation.userId, automation.userId.integrations, automation.userId.integrations.[0])
 
             if (listener?.listener === 'MESSAGE') {
                 const directMessage = await sendPrivateMessage({
