@@ -23,14 +23,14 @@ instagramRouter.post('/', async (req, res) => {
         const webhook_payload = req.body; 
         let matcher;
 
-        const entry = webhook_payload.entries?.[0];
-        console.log(webhook_payload)
+        const entry = webhook_payload.entry?.[0];
 
         if (!entry) {
             return res.status(400).json({ message: 'Invalid payload' });
         }
 
         // Handle messaging (DM)
+        console.log(entry)
         if (entry.messaging) {
             const messageText = entry.messaging[0]?.message?.text;
             matcher = await matchKeyword(messageText);
