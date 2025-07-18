@@ -3,10 +3,20 @@ const { matchKeyword, getKeywordAutomation, trackResponses } = require('./action
 
 const instagramRouter = express.Router();
 
+
 instagramRouter.get('/', (req, res) => {
-    const challenge = req.query['hub.challenge'];
-    return res.status(200).send(challenge || '');
-})
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+
+  if (mode === 'subscribe' && token === process.env.META_VERIFY_TOKEN) {
+    console.log('✅ Webhook verified');
+    return res.status(200).send(challenge);
+  } else {
+    console.log('❌ Verification failed');
+    return res.sendStatus(403);
+  }
+});
 
 instagramRouter.post('/', async (req, res) => {
     try {
