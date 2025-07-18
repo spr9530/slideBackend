@@ -25,7 +25,7 @@ instagramRouter.post('/', async (req, res) => {
 
         const entry = webhook_payload.entry?.[0];
 
-        console.log(entry)
+        console.log(entry.changes[0].value)
         if (!entry) {
             return res.status(400).json({ message: 'Invalid payload' });
         }
