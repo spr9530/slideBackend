@@ -1,5 +1,4 @@
-const Keyword = require('../../models/automation.model'); // assuming you have a Mongoose model
-const Automation = require('../../models/automation.model');
+const {Keyword, Automation} = require('../../models/automation.model.js');
 const Listener = require('../../models/automation.model');
 
 const axios = require('axios');
