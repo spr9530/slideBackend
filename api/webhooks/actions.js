@@ -1,41 +1,48 @@
-const {Keyword, Automation} = require('../../models/automation.model.js');
+const { Keyword, Automation } = require('../../models/automation.model.js');
 const Listener = require('../../models/automation.model');
 
 const axios = require('axios');
 
 const matchKeyword = async (keyword) => {
-    try {
-        const result = await Keyword.findOne({
-            word: { $regex: new RegExp(`^${keyword}$`, 'i') } // case-insensitive exact match
-        });
-        return result;
-    } catch (error) {
-        console.error('Error matching keyword:', error.message);
-        throw error;
-    }
+  try {
+    const result = await Keyword.findOne({
+      word: { $regex: new RegExp(`^${keyword}$`, 'i') } // case-insensitive exact match
+    });
+    return result;
+  } catch (error) {
+    console.error('Error matching keyword:', error.message);
+    throw error;
+  }
 };
 
 
 const getKeywordAutomation = async ({ automationId, dm }) => {
-    try {
-        const automation = await Automation.findOne({ _id: automationId })
-            .populate({
-                path: 'trigger',
-                match: { type: dm ? 'DM' : 'COMMENT' },
-            })
-            .populate('listener')
-            .populate('userId')
-            // .populate('integration');
-
-        if (dm) {
-            automation = automation.populate('dms')
+  try {
+    const automation = await Automation.findOne({ _id: automationId })
+      .populate({
+        path: 'trigger',
+        match: { type: dm ? 'DM' : 'COMMENT' },
+      })
+      .populate('listener')
+      .populate({
+        path: 'userId',
+        select: 'integrations',
+        populate: {
+          path: 'integrations',
+          model: 'Integration'
         }
+      })
+    // .populate('integration');
 
-        return automation;
-    } catch (error) {
-        console.error('Error in getKeywordAutomation:', error.message);
-        throw error;
+    if (dm) {
+      automation = automation.populate('dms')
     }
+
+    return automation;
+  } catch (error) {
+    console.error('Error in getKeywordAutomation:', error.message);
+    throw error;
+  }
 };
 
 const sendDM = async ({ userId, receiverId, prompt, token }) => {
@@ -95,7 +102,7 @@ const sendPrivateMessage = async ({ userId, receiverId, prompt, token }) => {
 const trackResponses = async ({ automationId, type }) => {
   try {
     const updateField = type === 'COMMENT' ? { commentCount: 1 } : type === 'DM' ? { dmCount: 1 } : null;
-    
+
     if (!updateField) return;
 
     const updatedListener = await Listener.findByIdAndUpdate(
