@@ -25,7 +25,6 @@ instagramRouter.post('/', async (req, res) => {
 
         const entry = webhook_payload.entry?.[0];
 
-        console.log(entry.changes[0].value)
         if (!entry) {
             return res.status(400).json({ message: 'Invalid payload' });
         }
@@ -42,8 +41,10 @@ instagramRouter.post('/', async (req, res) => {
             matcher = await matchKeyword(changeText);
         }
 
+        console.log('phase 1')
         if (matcher && matcher.automationId) {
             const isDM = !!entry.messaging;
+            console.log('got matchd keyword')
 
             const automation = await getKeywordAutomation({
                 automationId: matcher.automationId,
@@ -51,10 +52,13 @@ instagramRouter.post('/', async (req, res) => {
             });
 
             if (!automation || !automation.trigger) {
+                console.log("Automation not found")
                 return res.status(404).json({ message: 'Automation not found' });
             }
 
             const listener = automation.listener;
+
+            console.log(listener)
 
             if (listener?.listener === 'MESSAGE') {
                 const directMessage = await sendPrivateMessage({
@@ -63,6 +67,7 @@ instagramRouter.post('/', async (req, res) => {
                     prompt: listener?.prompt,
                     token: automation.userId?.integrations?.[0]?.token
                 });
+                console.log('got direct message')
 
                 if (directMessage?.status === 200) {
                     const tracked = await trackResponses({
