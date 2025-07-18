@@ -41,7 +41,7 @@ instagramRouter.post('/', async (req, res) => {
             matcher = await matchKeyword(changeText);
         }
 
-        console.log('phase 1')
+        console.log('phase 1',matcher)
         if (matcher && matcher.automationId) {
             const isDM = !!entry.messaging;
             console.log('got matchd keyword')

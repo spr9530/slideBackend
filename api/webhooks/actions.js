@@ -23,7 +23,7 @@ const getKeywordAutomation = async ({ automationId, dm }) => {
                 path: 'trigger',
                 match: { type: dm ? 'DM' : 'COMMENT' },
             })
-            .populate('listeners')
+            .populate('listener')
             .populate('userId')
             .populate('integration');
 
