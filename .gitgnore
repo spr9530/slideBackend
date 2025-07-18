@@ -1,0 +1,5 @@
+# Ignore node modules
+node_modules
+
+# macOS system file
+.DS_Store
