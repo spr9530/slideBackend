@@ -63,7 +63,10 @@ instagramRouter.post('/', async (req, res) => {
 
 
             if (listener?.listener === 'MESSAGE') {
-                console.log('phase 3', entry )
+                console.log('phase 3', entry.changes?.[0]?.value )
+                console.log('phase 3', entry.changes?.[0] )
+
+
                 const directMessage = await sendPrivateMessage({
                     userId: entry.id,
                     receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.recipient?.id,
