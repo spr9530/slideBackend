@@ -63,6 +63,7 @@ instagramRouter.post('/', async (req, res) => {
 
 
             if (listener?.listener === 'MESSAGE') {
+                console.log('phase 3' , entry.changes, entry.messaging, entry.messaging[0]?.message )
                 const directMessage = await sendPrivateMessage({
                     userId: entry.id,
                     receiverId: entry.changes[0].value.id,
@@ -74,7 +75,7 @@ instagramRouter.post('/', async (req, res) => {
                 if (directMessage?.status === 200) {
                     const tracked = await trackResponses({
                         automationId: automation._id,
-                        type: 'DM'
+                        type: 'MESSAGE'
                     });
 
                     if (tracked) {
