@@ -48,8 +48,9 @@ const getKeywordAutomation = async ({ automationId, dm }) => {
 
 const sendDM = async ({ userId, receiverId, prompt, token }) => {
   try {
+    console.log({ userId, receiverId, prompt, token })
     const res = await axios.post(
-      `${process.env.INSTAGRAM_BASE_URL}/v21/${userId}/messages`,
+      `${process.env.INSTAGRAM_BASE_URL}/${userId}/messages`,
       {
         recipient: {
           id: receiverId,
