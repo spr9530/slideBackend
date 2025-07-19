@@ -31,6 +31,7 @@ instagramRouter.post('/', async (req, res) => {
 
         // Handle messaging (DM)
         if (entry.messaging) {
+            console.log(entry, entry.messaging, entry.messaging[0].message)
             const messageText = entry.messaging[0]?.message?.text;
             matcher = await matchKeyword(messageText);
         }
@@ -58,7 +59,6 @@ instagramRouter.post('/', async (req, res) => {
 
             const listener = automation.listener;
 
-            console.log(automation.userId, automation.userId.integrations, automation.userId.integrations[0])
 
             if (listener?.listener === 'MESSAGE') {
                 const directMessage = await sendPrivateMessage({
@@ -76,6 +76,7 @@ instagramRouter.post('/', async (req, res) => {
                     });
 
                     if (tracked) {
+                        console.log('tracked')
                         return res.status(200).json({
                             message: 'Message sent successfully',
                             type: 'success'

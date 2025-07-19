@@ -147,7 +147,7 @@ const saveListener = async (req, res) => {
 
     const updatedAutomation = await Automation.findByIdAndUpdate(
       id,
-      { listener: newListener._id },
+      {$set : { listener: newListener}},
       { new: true }
     );
 
