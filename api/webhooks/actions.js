@@ -103,7 +103,6 @@ const sendPrivateMessage = async ({ userId, receiverId, prompt, token }) => {
 const trackResponses = async ({ automationId, type }) => {
   try {
 
-    if (!updateField) return;
 
     const updatedListener = await Listener.findByIdAndUpdate(
       automationId,
