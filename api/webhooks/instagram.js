@@ -68,7 +68,7 @@ instagramRouter.post('/', async (req, res) => {
                 console.log(entry.id)
 
 // 758842513180249 slidesurf
-                const directMessage = await sendDM({
+                const directMessage = await sendPrivateMessage({
                     userId: entry.id ,
                     receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.sender?.id,
                     prompt: listener?.prompt,
