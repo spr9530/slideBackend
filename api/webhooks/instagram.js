@@ -5,22 +5,22 @@ const instagramRouter = express.Router();
 
 
 instagramRouter.get('/', (req, res) => {
-  const mode = req.query['hub.mode'];
-  const token = req.query['hub.verify_token'];
-  const challenge = req.query['hub.challenge'];
+    const mode = req.query['hub.mode'];
+    const token = req.query['hub.verify_token'];
+    const challenge = req.query['hub.challenge'];
 
-  if (mode === 'subscribe' && token === process.env.META_VERIFY_TOKEN) {
-    console.log('✅ Webhook verified');
-    return res.status(200).send(challenge);
-  } else {
-    console.log('❌ Verification failed');
-    return res.sendStatus(403);
-  }
+    if (mode === 'subscribe' && token === process.env.META_VERIFY_TOKEN) {
+        console.log('✅ Webhook verified');
+        return res.status(200).send(challenge);
+    } else {
+        console.log('❌ Verification failed');
+        return res.sendStatus(403);
+    }
 });
 
 instagramRouter.post('/', async (req, res) => {
     try {
-        const webhook_payload = req.body; 
+        const webhook_payload = req.body;
         let matcher;
 
         const entry = webhook_payload.entry?.[0];
@@ -41,7 +41,7 @@ instagramRouter.post('/', async (req, res) => {
             matcher = await matchKeyword(changeText);
         }
 
-        console.log('phase 1',matcher)
+        console.log('phase 1', matcher)
         if (matcher && matcher.automationId) {
             const isDM = !!entry.messaging;
             console.log('got matchd keyword')
@@ -50,6 +50,9 @@ instagramRouter.post('/', async (req, res) => {
                 automationId: matcher.automationId,
                 dm: isDM
             });
+
+            console.log('phase 2', automation)
+
 
             if (!automation || !automation.trigger) {
                 console.log("Automation not found")
