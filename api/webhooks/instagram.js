@@ -70,7 +70,7 @@ instagramRouter.post('/', async (req, res) => {
 // 758842513180249 slidesurf
                 const directMessage = await sendDM({
                     userId: entry.id ,
-                    receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.recipient?.id,
+                    receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.sender?.id,
                     prompt: listener?.prompt,
                     token: automation.userId?.integrations?.[0]?.token
                 });
