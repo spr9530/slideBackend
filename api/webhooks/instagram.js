@@ -1,5 +1,5 @@
 const express = require('express');
-const { matchKeyword, getKeywordAutomation, trackResponses, sendPrivateMessage } = require('./actions');
+const { matchKeyword, getKeywordAutomation, trackResponses, sendPrivateMessage, sendDM } = require('./actions');
 
 const instagramRouter = express.Router();
 
