@@ -31,7 +31,6 @@ instagramRouter.post('/', async (req, res) => {
 
         // Handle messaging (DM)
         if (entry.messaging) {
-            console.log(entry, entry.messaging, entry.messaging[0].message)
             const messageText = entry.messaging[0]?.message?.text;
             matcher = await matchKeyword(messageText);
         }

@@ -18,7 +18,7 @@ const matchKeyword = async (keyword) => {
 
 const getKeywordAutomation = async ({ automationId, dm }) => {
   try {
-    const automation = await Automation.findOne({ _id: automationId })
+    let automation = await Automation.findOne({ _id: automationId })
       .populate({
         path: 'trigger',
         match: { type: dm ? 'DM' : 'COMMENT' },
