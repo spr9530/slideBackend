@@ -68,8 +68,7 @@ instagramRouter.post('/', async (req, res) => {
                         prompt: listener?.prompt,
                         token: automation.userId?.integrations?.[0]?.token
                     });
-                    console.log(directMessage)
-                    if (directMessage) {
+                    if (directMessage.message_id) {
                         const tracked = await trackResponses({
                             automationId: automation._id,
                             type: 'MESSAGE'

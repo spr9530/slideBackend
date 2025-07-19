@@ -31,7 +31,7 @@ const getKeywordAutomation = async ({ automationId, dm }) => {
           model: 'Integration'
         }
       })
-      console.log(automation)
+    console.log(automation)
     // .populate('integration');
 
     if (dm) {
@@ -75,7 +75,6 @@ const sendDM = async ({ userId, receiverId, prompt, token }) => {
 
 const sendPrivateMessage = async ({ userId, receiverId, prompt, token }) => {
   try {
-    console.log({ userId, receiverId, prompt, token })
     const res = await axios.post(
       `${process.env.INSTAGRAM_BASE_URL}/${userId}/messages`,
       {
@@ -103,15 +102,19 @@ const sendPrivateMessage = async ({ userId, receiverId, prompt, token }) => {
 
 const trackResponses = async ({ automationId, type }) => {
   try {
-    const updateField = type === 'COMMENT' ? { commentCount: 1 } : type === 'DM' ? { dmCount: 1 } : null;
 
     if (!updateField) return;
 
     const updatedListener = await Listener.findByIdAndUpdate(
       automationId,
-      { $inc: updateField },
+      {
+        $inc: {
+          [type === 'MESSAGE' ? 'dmCount' : 'commentCount']: 1
+        }
+      },
       { new: true }
     );
+
 
     return updatedListener;
   } catch (error) {
