@@ -1,5 +1,5 @@
 const express = require('express');
-const { matchKeyword, getKeywordAutomation, trackResponses, sendPrivateMessage, sendDM } = require('./actions');
+const { matchKeyword, getKeywordAutomation, trackResponses, sendPrivateMessage } = require('./actions');
 
 const instagramRouter = express.Router();
 
@@ -64,7 +64,7 @@ instagramRouter.post('/', async (req, res) => {
 
             if (listener?.listener === 'MESSAGE') {
                 console.log('phase 3', entry )
-                const directMessage = await sendDM({
+                const directMessage = await sendPrivateMessage({
                     userId: entry.id,
                     receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.recipient?.id,
                     prompt: listener?.prompt,
