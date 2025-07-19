@@ -64,11 +64,12 @@ instagramRouter.post('/', async (req, res) => {
                 if (entry.messaging) {
                     const directMessage = await sendDM({
                         userId: entry.id,
-                        receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.sender?.id,
+                        receiverId: entry.messaging?.[0]?.sender?.id,
                         prompt: listener?.prompt,
                         token: automation.userId?.integrations?.[0]?.token
                     });
-                    if (directMessage?.status === 200) {
+                    console.log(directMessage)
+                    if (directMessage) {
                         const tracked = await trackResponses({
                             automationId: automation._id,
                             type: 'MESSAGE'
@@ -86,7 +87,7 @@ instagramRouter.post('/', async (req, res) => {
                 if(entry.changes) {
                     const directMessage = await sendPrivateMessage({
                         userId: entry.id,
-                        receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.sender?.id,
+                        receiverId: entry.changes?.[0]?.value?.id ,
                         prompt: listener?.prompt,
                         token: automation.userId?.integrations?.[0]?.token
                     });
