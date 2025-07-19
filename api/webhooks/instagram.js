@@ -41,7 +41,6 @@ instagramRouter.post('/', async (req, res) => {
             matcher = await matchKeyword(changeText);
         }
 
-        console.log('phase 1', matcher)
         if (matcher && matcher.automationId) {
             const isDM = !!entry.messaging;
             console.log('got matchd keyword')
@@ -51,7 +50,6 @@ instagramRouter.post('/', async (req, res) => {
                 dm: isDM
             });
 
-            console.log('phase 2', automation)
 
 
             if (!automation || !automation.trigger) {
@@ -63,33 +61,52 @@ instagramRouter.post('/', async (req, res) => {
 
 
             if (listener?.listener === 'MESSAGE') {
-                // console.log('phase 3', entry.changes?.[0]?.value )
-                // console.log('phase 3', entry.changes?.[0] )
-                console.log(entry.id)
-
-// 758842513180249 slidesurf
-                const directMessage = await sendPrivateMessage({
-                    userId: entry.id ,
-                    receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.sender?.id,
-                    prompt: listener?.prompt,
-                    token: automation.userId?.integrations?.[0]?.token
-                });
-                console.log('got direct message')
-
-                if (directMessage?.status === 200) {
-                    const tracked = await trackResponses({
-                        automationId: automation._id,
-                        type: 'MESSAGE'
+                if (entry.messaging) {
+                    const directMessage = await sendDM({
+                        userId: entry.id,
+                        receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.sender?.id,
+                        prompt: listener?.prompt,
+                        token: automation.userId?.integrations?.[0]?.token
                     });
-
-                    if (tracked) {
-                        console.log('tracked')
-                        return res.status(200).json({
-                            message: 'Message sent successfully',
-                            type: 'success'
+                    if (directMessage?.status === 200) {
+                        const tracked = await trackResponses({
+                            automationId: automation._id,
+                            type: 'MESSAGE'
                         });
+
+                        if (tracked) {
+                            console.log('tracked')
+                            return res.status(200).json({
+                                message: 'Message sent successfully',
+                                type: 'success'
+                            });
+                        }
+                    }
+                } 
+                if(entry.changes) {
+                    const directMessage = await sendPrivateMessage({
+                        userId: entry.id,
+                        receiverId: entry.changes?.[0]?.value?.id || entry.messaging?.[0]?.sender?.id,
+                        prompt: listener?.prompt,
+                        token: automation.userId?.integrations?.[0]?.token
+                    });
+                    if (directMessage?.status === 200) {
+                        const tracked = await trackResponses({
+                            automationId: automation._id,
+                            type: 'MESSAGE'
+                        });
+
+                        if (tracked) {
+                            console.log('tracked')
+                            return res.status(200).json({
+                                message: 'Message sent successfully',
+                                type: 'success'
+                            });
+                        }
                     }
                 }
+
+
             }
 
             if (listener?.listener === 'SMARTAI') {

@@ -1,5 +1,4 @@
-const { Keyword, Automation } = require('../../models/automation.model.js');
-const Listener = require('../../models/automation.model');
+const { Keyword, Automation, Listener } = require('../../models/automation.model.js');
 
 const axios = require('axios');
 
