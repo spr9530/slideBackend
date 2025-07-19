@@ -75,6 +75,7 @@ const sendDM = async ({ userId, receiverId, prompt, token }) => {
 
 const sendPrivateMessage = async ({ userId, receiverId, prompt, token }) => {
   try {
+    console.log({ userId, receiverId, prompt, token })
     const res = await axios.post(
       `${process.env.INSTAGRAM_BASE_URL}/${userId}/messages`,
       {
