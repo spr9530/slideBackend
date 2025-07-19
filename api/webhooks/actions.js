@@ -104,8 +104,8 @@ const trackResponses = async ({ automationId, type }) => {
   try {
 
 
-    const updatedListener = await Listener.findByIdAndUpdate(
-      automationId,
+    const updatedListener = await Listener.findOneAndUpdate(
+      {automationId},
       {
         $inc: {
           [type === 'MESSAGE' ? 'dmCount' : 'commentCount']: 1
